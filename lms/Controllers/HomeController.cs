@@ -1,16 +1,18 @@
 ﻿using System.Diagnostics;
 using lms.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace lms.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly LmsDBContext  _dbContext;
+        public HomeController(ILogger<HomeController> logger, LmsDBContext lmsDBContext)
         {
             _logger = logger;
+            _dbContext = lmsDBContext;
         }
 
         public IActionResult Index()
