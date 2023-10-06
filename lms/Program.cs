@@ -1,7 +1,11 @@
+using lms.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<LmsDBContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("lmsDB")));
 
 var app = builder.Build();
 
