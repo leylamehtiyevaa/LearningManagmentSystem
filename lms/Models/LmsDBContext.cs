@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Configuration;
+using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace lms.Models
 {
-    public class LmsDBContext: DbContext
+    public class LmsDBContext: IdentityDbContext<IdentityUser>
     {
         private readonly IConfiguration configuration;
 
@@ -14,5 +18,6 @@ namespace lms.Models
         {
             
         }
+
     }
 }
