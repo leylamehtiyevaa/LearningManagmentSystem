@@ -7,7 +7,7 @@ namespace lms.Models
         [Key]
         public int CourseId { get; set; }
         public int ResourceId { get; set; }
-        public virtual LearningResource learningResource { get; set; }  
-        public virtual Course course {  get; set; }
+        public  LearningResource learningResource { get; set; }  
+        public  Course course {  get; set; }
     }
 }

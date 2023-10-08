@@ -11,8 +11,7 @@ namespace lms.Models
         public int ImageURL { get; set; }
         public int InstructorId {  get; set; }
         //list de farklı tablo da olabilir, üzerine konuşalım
-        public string Category { get; set; }
-        public virtual User user { get; set; }
+        public Category category { get; set; }
         public Course() { }
 
     }
