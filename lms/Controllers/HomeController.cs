@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lms.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,9 +18,19 @@ namespace lms.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var viewModel = new HomeViewModel
+            {
+                Categories = _dbContext.Category.ToList(),
+                Courses = _dbContext.Course.ToList(),
+            };
+
+            return View(viewModel);
         }
 
+        public IActionResult Admin()
+        {
+            return View();
+        }
         public IActionResult About()
         {
             return View();

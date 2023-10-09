@@ -1,0 +1,24 @@
+﻿@model IEnumerable<lms.Models.Course>
+<div class="container">
+    <div class="row justify-content-center mb-3">
+        <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="0">
+            <h2 class="line-bottom text-center mb-4">Browse Top Category</h2>
+        </div>
+    </div>
+    <div class="row align-items-stretch">
+        @foreach (var category in Model)
+        {
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <a href="#" class="category d-flex align-items-start h-100">
+                    <div>
+                        <i class="uil uil-atom"></i>
+                    </div>
+                    <div>
+                        <h3>@category.Name</h3>
+                        <span>@category.Description courses</span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
