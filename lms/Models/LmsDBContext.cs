@@ -10,8 +10,8 @@ namespace lms.Models
     {
         private readonly IConfiguration configuration;
 
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Category> Category { get; set; }
 
 
         public LmsDBContext(DbContextOptions<LmsDBContext> options) : base(options)
