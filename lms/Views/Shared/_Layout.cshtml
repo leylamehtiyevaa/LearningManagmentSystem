@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lms.styles.css" asp-append-version="true" />
-    
+
     <link rel="shortcut icon" href="favicon.png">
 
     <meta name="description" content="" />
@@ -54,16 +54,16 @@
 
 
                     <partial name="_LoginPartial" />
-                   <!-- <div class="col-6 col-lg-3 text-right">
-                        <a asp-controller="Login" asp-action="Index" class="small mr-3">
-                            <span class="icon-lock"></span>
-                            Log In
-                        </a>
-                        <a asp-controller="Register" asp-action="Index" class="small">
-                            <span class="icon-person"></span>
-                            Register
-                        </a>
-                     </div>-->
+                    <!-- <div class="col-6 col-lg-3 text-right">
+                         <a asp-controller="Login" asp-action="Index" class="small mr-3">
+                             <span class="icon-lock"></span>
+                             Log In
+                         </a>
+                         <a asp-controller="Register" asp-action="Index" class="small">
+                             <span class="icon-person"></span>
+                             Register
+                         </a>
+                      </div>-->
 
                 </div>
             </div>
@@ -75,23 +75,10 @@
 
                     <ul class="js-clone-nav d-none d-lg-inline-block site-menu">
                         <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="has-children">
-                            <a href="#">Courses</a>
-                            <ul class="dropdown">
-                                <li><a href="elements.html">Category 1</a></li>
-                                <li class="has-children">
-                                    <a href="#">Category two</a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Sub category One</a></li>
-                                        <li><a href="#">Sub Menu Two</a></li>
-                                        <li><a href="#">Sub Menu Three</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Category Three</a></li>
-                            </ul>
-                        </li>
+                        <li><a asp-controller="Home" asp-action="CourseList">Courses</a></li>
                         <li><a asp-controller="Home" asp-action="Staff">Our Staff</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-controller="Home" asp-action="Admin">Admin</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                     </ul>
 

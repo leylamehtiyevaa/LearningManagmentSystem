@@ -12,6 +12,8 @@ namespace lms.Models
         public int CategoryId { get; set; }
 
         public string Author { get; set; }
+
+        public string imageURL { get; set; }   
         public virtual Category? Category { get; set; }
 
         public Course() { }
