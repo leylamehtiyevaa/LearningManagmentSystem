@@ -21,10 +21,15 @@ namespace lms.Controllers
             var viewModel = new HomeViewModel
             {
                 Categories = _dbContext.Category.ToList(),
-                Courses = _dbContext.Course.ToList(),
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> CourseList()
+        {
+            var lmsDBContext = _dbContext.Course.Include(c => c.Category);
+            return View(await lmsDBContext.ToListAsync());
         }
 
         public IActionResult Admin()

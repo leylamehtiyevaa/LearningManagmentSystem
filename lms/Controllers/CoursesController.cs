@@ -21,9 +21,8 @@ namespace lms.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-              return _context.Course != null ? 
-                          View(await _context.Course.ToListAsync()) :
-                          Problem("Entity set 'LmsDBContext.Course'  is null.");
+            var lmsDBContext = _context.Course.Include(c => c.Category);
+            return View(await lmsDBContext.ToListAsync());
         }
 
         // GET: Courses/Details/5
@@ -35,6 +34,7 @@ namespace lms.Controllers
             }
 
             var course = await _context.Course
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
@@ -47,6 +47,7 @@ namespace lms.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name");
             return View();
         }
 
@@ -55,7 +56,7 @@ namespace lms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Author,Category")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,CategoryId,Author")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +64,7 @@ namespace lms.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", course.CategoryId);
             return View(course);
         }
 
@@ -79,6 +81,7 @@ namespace lms.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", course.CategoryId);
             return View(course);
         }
 
@@ -87,7 +90,7 @@ namespace lms.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Author,Category")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,CategoryId,Author")] Course course)
         {
             if (id != course.Id)
             {
@@ -114,6 +117,7 @@ namespace lms.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "Name", course.CategoryId);
             return View(course);
         }
 
@@ -126,6 +130,7 @@ namespace lms.Controllers
             }
 
             var course = await _context.Course
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (course == null)
             {
