@@ -1,0 +1,51 @@
+﻿@model lms.Models.Course
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="untree_co-hero overlay" style="background-image: url('~/images/img-school-1-min.jpg');height:300px">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12">
+                <div class="row justify-content-center ">
+                    <div class="col-lg-6 text-center ">
+                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Admin Panel - @ViewData["Title"]</h1>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+</div>
+
+<div class="container mt-5 col-6 mb-3">
+    <h4 class="text-primary">Course Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Name:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-2">Description:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt class="col-sm-2">Author:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Author)</dd>
+
+        <dt class="col-sm-2">imageURL:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.imageURL)</dd>
+
+        <dt class="col-sm-2">Category:</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Category.Name)</dd>
+    </dl>
+    <div class="container mt-3">
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+
