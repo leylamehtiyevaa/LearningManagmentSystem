@@ -1,4 +1,4 @@
-﻿@model lms.Models.Course
+﻿@model lms.Models.CourseEnrollmentViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -28,27 +28,27 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">Name:</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Name)</dd>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.course.Name)</dd>
 
         <dt class="col-sm-2">Description:</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.course.Description)</dd>
 
         <dt class="col-sm-2">Author:</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Author)</dd>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.course.Author)</dd>
 
         <dt class="col-sm-2">imageURL:</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.imageURL)</dd>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.course.imageURL)</dd>
 
         <dt class="col-sm-2">Category:</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(model => model.Category.Name)</dd>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.course.Category.Name)</dd>
     </dl>
     <div class="container mt-3">
-        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Edit" asp-route-id="@Model?.course.Id" class="btn btn-primary">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-        <form asp-controller="Courses" asp-action="Enroll" asp-route-id="@Model?.Id">
-            <button type="submit" class="btn btn-danger">Enroll</button>  
+        <form asp-controller="Courses" asp-action=@(Model.isEnrolled ? "UnEnroll" : "Enroll") asp-route-id="@Model?.course.Id">
+            <button type="submit" class="btn btn-danger">@(Model.isEnrolled ? "UnEnroll" : "Enroll")</button>
         </form>
-        @Html.ActionLink("Create Material", "Create", "Materials", new { courseId = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Create Material", "Create", "Materials", new { courseId = Model.course.Id }, new { @class = "btn btn-primary" })
     </div>
 </div>
 
