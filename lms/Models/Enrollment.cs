@@ -16,7 +16,7 @@ namespace lms.Models
         public virtual IdentityUser? IdentityUser { get; set; }
 
 
-
+        public int step { get; set; } = 1;
         public Enrollment() { }
     }
 }

@@ -50,6 +50,10 @@ namespace lms.Controllers
             else
             {
                 courseEnroll.enrolled = true;
+                var materials = _context.Material
+                    .Where(m => m.CourseId == id).ToList<Material>();
+                courseEnroll.materials = materials;
+
             }
             return View(courseEnroll);
         }
@@ -81,6 +85,48 @@ namespace lms.Controllers
                 else
                 {
                     return Problem("Already Enrolled");
+                }
+
+
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index), new { id = id });
+        }
+
+        [HttpPost, ActionName("UnEnroll")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnEnroll(int id)
+        {
+            if (_context.Course == null)
+            {
+                return Problem("Entity set 'LmsDBContext.Course'  is null.");
+            }
+            var course = await _context.Course.FindAsync(id);
+            if (course != null)
+            {
+                Enrollment enrollment = new Enrollment();
+                enrollment.CourseId = id;
+
+                var user = await _userManager.GetUserAsync(User);
+                var Userid = user.Id;
+                enrollment.UserId = Userid;
+
+
+                bool exist = _context.Enrollment.Any(e => e.CourseId == id && e.UserId == Userid);
+                if (exist)
+                {
+                    // Find the entry
+                    var entryToDelete = await _context.Enrollment.FirstOrDefaultAsync(e => e.CourseId == id && e.UserId == Userid);
+                    if(entryToDelete != null)
+                    {
+                        _context.Enrollment.Remove(entryToDelete);
+                    }
+                    
+                }
+                else
+                {
+                    return Problem("Not Enrolled");
                 }
 
 
