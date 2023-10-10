@@ -45,9 +45,9 @@ namespace lms.Controllers
         }
 
         // GET: Materials/Create
-        public IActionResult Create()
+        public IActionResult Create(int? courseId)
         {
-            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name");
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name", courseId);
             return View();
         }
 
