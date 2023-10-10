@@ -37,6 +37,11 @@ namespace lms.Controllers
                 return NotFound();
             }
 
+            var user = await _userManager.GetUserAsync(User);
+            var Userid = user.Id;
+            bool exist = _context.Enrollment.Any(e => e.CourseId == id && e.UserId == Userid);
+            
+
             var course = await _context.Course
                 .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -44,8 +49,12 @@ namespace lms.Controllers
             {
                 return NotFound();
             }
+            CourseEnrollmentViewModel courseEnrollmentViewModel = new CourseEnrollmentViewModel();
+            courseEnrollmentViewModel.course = course;
+            courseEnrollmentViewModel.isEnrolled = exist;
+            
 
-            return View(course);
+            return View(courseEnrollmentViewModel);
         }
 
         // GET: Courses/Create
@@ -260,6 +269,46 @@ namespace lms.Controllers
                 }
                 
                 
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // POST: Courses/UnEnroll/5
+        [HttpPost, ActionName("UnEnroll")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UnEnroll(int id)
+        {
+            if (_context.Course == null)
+            {
+                return Problem("Entity set 'LmsDBContext.Course'  is null.");
+            }
+            var course = await _context.Course.FindAsync(id);
+            if (course != null)
+            {
+                Enrollment enrollment = new Enrollment();
+                enrollment.CourseId = id;
+
+                var user = await _userManager.GetUserAsync(User);
+                var Userid = user.Id;
+                enrollment.UserId = Userid;
+
+
+                bool exist = _context.Enrollment.Any(e => e.CourseId == id && e.UserId == Userid);
+                if (exist)
+                {
+                    // Find the entry
+                    var entryToDelete = await _context.Enrollment.FirstOrDefaultAsync(e => e.CourseId == id && e.UserId == Userid);
+                    _context.Enrollment.Remove(entryToDelete);
+                }
+                else
+                {
+                    return Problem("Not Enrolled");
+                }
+
+
             }
 
             await _context.SaveChangesAsync();
