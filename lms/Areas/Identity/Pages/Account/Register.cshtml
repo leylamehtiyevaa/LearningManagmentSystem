@@ -42,6 +42,12 @@
                             
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
+                        <div class="col-12 mb-3">
+                            
+                            <label asp-for="Input.isInstructor">Student <input type="radio" asp-for="Input.isInstructor" value="0"></label><br>
+                            
+                            <label asp-for="Input.isInstructor">Instructor <input type="radio" asp-for="Input.isInstructor" value="1"> </label><br>
+                        </div>
                         <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
               </div>
                     </form>
