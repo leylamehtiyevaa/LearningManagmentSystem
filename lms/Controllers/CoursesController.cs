@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using lms.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace lms.Controllers
 {
     public class CoursesController : Controller
     {
         private readonly LmsDBContext _context;
+        private UserManager<IdentityUser> _userManager;
 
-        public CoursesController(LmsDBContext context)
+
+        public CoursesController(LmsDBContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Courses
@@ -158,6 +162,115 @@ namespace lms.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // GET: Courses/Enroll/5
+        public async Task<IActionResult> Enroll(int? id)
+        {
+            if (id == null || _context.Course == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Course
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
+
+        // POST: Courses/Enroll/5
+        [HttpPost, ActionName("Enroll")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EnrollConfirmed(int id)
+        {
+            if (_context.Course == null)
+            {
+                return Problem("Entity set 'LmsDBContext.Course'  is null.");
+            }
+            var course = await _context.Course.FindAsync(id);
+            if (course != null)
+            {
+                Enrollment enrollment = new Enrollment();
+                enrollment.CourseId = id;
+
+                var user = await _userManager.GetUserAsync(User);
+                var Userid = user.Id;
+                enrollment.UserId = Userid;
+
+                bool exist = _context.Enrollment.Any(e => e.CourseId == id && e.UserId == Userid );
+                if (!exist)
+                {
+                    _context.Enrollment.Add(enrollment);
+                }
+                else
+                {
+                    return Problem("Already Enrolled");
+                }
+                
+                
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
+
 
         private bool CourseExists(int id)
         {
