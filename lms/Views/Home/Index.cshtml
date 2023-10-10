@@ -28,7 +28,33 @@
         </div> <!-- /.row -->
     </div> <!-- /.container -->
 
-</div> <!-- /.untree_co-hero -->
+</div> 
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="0">
+                <h2 class="line-bottom text-center mb-4">Browse Top Category</h2>
+            </div>
+        </div>
+        <div class="row align-items-stretch">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <a asp-controller="Home" asp-action="CoursesByCategory" asp-route-id="@category.Id" class="category d-flex align-items-start h-100">
+                        <div>
+                            <i class="uil uil-@category.iconURL"></i>
+                        </div>
+                        <div>
+                            <h3>@category.Name</h3>
+                            <span>@category.Description</span>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+<!-- /.untree_co-hero 
 <div class="untree_co-section">
     <div class="container">
         <div class="row justify-content-center mb-3">
@@ -62,7 +88,7 @@
             <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="200">
                 <a href="#" class="category d-flex align-items-start h-100">
                     <div>
-                        <i class="uil uil-calculator"></i>
+                        <i class="uil uil-java-script"></i>
                     </div>
                     <div>
                         <h3>Finance Accounting</h3>
@@ -137,7 +163,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="services-section">
     <div class="container">

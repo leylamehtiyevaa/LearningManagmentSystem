@@ -32,6 +32,12 @@ namespace lms.Controllers
             return View(await lmsDBContext.ToListAsync());
         }
 
+        public async Task<IActionResult> CoursesByCategory(int? id)
+        {
+            var lmsDBContext = _dbContext.Course.Include(c => c.Category).Where(c => c.CategoryId == id);
+            return View(await lmsDBContext.ToListAsync());
+        }
+
         public IActionResult Admin()
         {
             return View();

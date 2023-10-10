@@ -46,7 +46,7 @@
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Description)</td>
                         <td>@Html.DisplayFor(modelItem => item.Author)</td>
-                        <td>@Html.DisplayFor(modelItem => item.imageURL)</td>
+                        <td><img src="@Html.DisplayFor(modelItem => item.imageURL)" style="height:150px; width: auto" alt="Image" class="img-fluid"></td>
                         <td>@Html.DisplayFor(modelItem => item.Category.Id)</td>
                         <td>
                             <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
