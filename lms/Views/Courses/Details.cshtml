@@ -45,6 +45,10 @@
     <div class="container mt-3">
         <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <form asp-controller="Courses" asp-action="Enroll" asp-route-id="@Model?.Id">
+            <button type="submit" class="btn btn-danger">Enroll</button>  
+        </form>
+        @Html.ActionLink("Create Material", "Create", "Materials", new { courseId = Model.Id }, new { @class = "btn btn-primary" })
     </div>
 </div>
 

@@ -13,11 +13,14 @@ namespace lms.Models
         public DbSet<Course> Course { get; set; }
         public DbSet<Category> Category { get; set; }
 
+        public DbSet<Enrollment> Enrollment { get; set; }
+        public DbSet<Material> Material { get; set; }
 
         public LmsDBContext(DbContextOptions<LmsDBContext> options) : base(options)
         {
             
         }
+            
 
     }
 }
