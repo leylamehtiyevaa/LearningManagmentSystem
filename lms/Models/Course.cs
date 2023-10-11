@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace lms.Models
 {
@@ -10,6 +11,10 @@ namespace lms.Models
 
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
+
+        [ForeignKey("IdentityUser")]
+        public String? InstructorId { get; set; }
+        public virtual IdentityUser? IdentityUser { get; set; }
 
         public string Author { get; set; }
 

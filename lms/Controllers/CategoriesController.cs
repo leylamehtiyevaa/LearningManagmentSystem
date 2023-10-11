@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using lms.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace lms.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly LmsDBContext _context;

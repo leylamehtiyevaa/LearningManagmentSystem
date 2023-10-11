@@ -1,5 +1,9 @@
 ﻿@model lms.Models.Course
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+
 @{
     ViewData["Title"] = "Create Course";
 }
@@ -29,6 +33,7 @@
         <div class="col-md-6">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input asp-for="InstructorId" type="hidden" value="@UserManager.GetUserId(User)" />
 
                 <div class="form-group">
                     <label asp-for="Name" class="control-label">Name:</label>

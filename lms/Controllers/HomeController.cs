@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using lms.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,8 +38,13 @@ namespace lms.Controllers
             var lmsDBContext = _dbContext.Course.Include(c => c.Category).Where(c => c.CategoryId == id);
             return View(await lmsDBContext.ToListAsync());
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Instructor")]
+        public IActionResult Instructor()
         {
             return View();
         }
