@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace lms.Models
 {
@@ -15,5 +16,9 @@ namespace lms.Models
         [ForeignKey("Course")]
         public int CourseId { get; set; }
         public virtual Course? Course { get; set; }
+
+        [ForeignKey("IdentityUser")]
+        public String? InstructorId { get; set; }
+        public virtual IdentityUser? IdentityUser { get; set; }
     }
 }
