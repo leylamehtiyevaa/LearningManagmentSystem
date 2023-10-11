@@ -24,6 +24,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 
+    app.Use(next => context => {
+        context.Request.EnableBuffering();
+        return next(context);
+    });
     app.Use(async (context, next) =>
     {
         context.Response.Headers.Add("X-Frame-Options", "ALLOW-FROM https://youtube.com"); // Replace with the allowed domain

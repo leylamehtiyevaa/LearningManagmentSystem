@@ -9,5 +9,7 @@
 
         public Course course { get; set; }
         public bool isEnrolled { get; set; }
+
+        
     }
 }

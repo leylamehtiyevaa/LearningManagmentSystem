@@ -1,8 +1,12 @@
-﻿using lms.Models;
+﻿using Azure.Core;
+using lms.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using System.Linq;
+using System.Text.Json;
 
 namespace lms.Controllers
 {
@@ -53,11 +57,58 @@ namespace lms.Controllers
                 var materials = _context.Material
                     .Where(m => m.CourseId == id).ToList<Material>();
                 courseEnroll.materials = materials;
-
+                courseEnroll.currentStep = enrollement.step;
+                courseEnroll.enrollementID = enrollement.Id;
+                courseEnroll.stepLength = materials.Count();
             }
             return View(courseEnroll);
         }
 
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditStep(int id,int step)
+        {
+
+            var enrollment = await _context.Enrollment.FindAsync(id);
+
+
+
+            if (enrollment == null)
+            {
+                return NotFound();
+            }
+
+            // Update the step's state based on the isChecked parameter
+            enrollment.step = step;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(enrollment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EnrollmentExists(enrollment.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Index), new { id = enrollment.CourseId });
+                    }
+                }
+                return RedirectToAction(nameof(Index), new { id = enrollment.CourseId });
+            }
+            return RedirectToAction(nameof(Index), new { id = enrollment.CourseId });
+        }
+
+        private bool EnrollmentExists(int id)
+        {
+            return (_context.Enrollment?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
 
         [HttpPost, ActionName("Enroll")]
         [ValidateAntiForgeryToken]
