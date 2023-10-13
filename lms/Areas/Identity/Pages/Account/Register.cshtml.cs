@@ -121,7 +121,27 @@ namespace lms.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                string[] roleNames = { "Admin", "User", "Instructor" };
+                IdentityResult roleResult;
+
+                foreach (var roleName in roleNames)
+                {
+                    var roleExists = await _roleManager.RoleExistsAsync(roleName);
+                    if (!roleExists)
+                    {
+                        var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                        if (!roleExist)
+                        {
+                            IdentityRole appuserRole = new IdentityRole();
+                            appuserRole.Name = roleName;
+                            roleResult = await _roleManager.CreateAsync(appuserRole);
+                        }
+                    }
+                }
+
+
+
+                    await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
