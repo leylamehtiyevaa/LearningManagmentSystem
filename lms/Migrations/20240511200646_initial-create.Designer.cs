@@ -12,8 +12,8 @@ using lms.Models;
 namespace lms.Migrations
 {
     [DbContext(typeof(LmsDBContext))]
-    [Migration("20231009120520_ModelChange_2")]
-    partial class ModelChange_2
+    [Migration("20240511200646_initial-create")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,6 +240,10 @@ namespace lms.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("iconURL")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Category");
@@ -264,7 +268,14 @@ namespace lms.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("InstructorId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("imageURL")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -272,7 +283,79 @@ namespace lms.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("InstructorId");
+
                     b.ToTable("Course");
+                });
+
+            modelBuilder.Entity("lms.Models.Enrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("step")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Enrollment");
+                });
+
+            modelBuilder.Entity("lms.Models.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("InstructorId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VideoURL")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("Material");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -334,7 +417,49 @@ namespace lms.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("InstructorId");
+
                     b.Navigation("Category");
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("lms.Models.Enrollment", b =>
+                {
+                    b.HasOne("lms.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("lms.Models.Material", b =>
+                {
+                    b.HasOne("lms.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("InstructorId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("IdentityUser");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,76 @@
+﻿@model lms.Models.Material
+
+@{
+    ViewData["Title"] = "Create Material";
+}
+
+<div class="untree_co-hero overlay" style="background-image: url('~/images/img-school-1-min.jpg');height:300px">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12">
+                <div class="row justify-content-center ">
+                    <div class="col-lg-6 text-center ">
+                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Admin Panel - @ViewData["Title"]</h1>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+</div>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <form asp-action="Create" class="p-4 border rounded bg-light">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Course Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VideoURL" class="control-label">Video URL</label>
+                <input asp-for="VideoURL" class="form-control" />
+                <span asp-validation-for="VideoURL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageURL" class="control-label">Image URL</label>
+                <input asp-for="ImageURL" class="form-control" />
+                <span asp-validation-for="ImageURL" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label">Author</label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Course ID</label>
+                <select asp-for="CourseId" class="form-control" asp-items="ViewBag.CourseId">
+                    <option value="">Select a Course</option>
+                </select>
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

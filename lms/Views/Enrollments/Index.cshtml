@@ -13,7 +13,7 @@
             <div class="col-12">
                 <div class="row justify-content-center ">
                     <div class="col-lg-6 text-center ">
-                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Available courses</h1>
+                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">My Courses</h1>
 
                     </div>
 
@@ -41,11 +41,12 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <a asp-controller="CourseContent" asp-action="Index" asp-route-id="@item.Id" class="btn btn-primary custom-card-button">Learn More</a>
-                }else
+                }
+                else
                 {
                     <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary custom-card-button">Sign up now</a>
                 }
-                
+
             </div>
         </div>
 

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -78,7 +81,20 @@
                         <li><a asp-controller="Home" asp-action="CourseList">Courses</a></li>
                         <li><a asp-controller="Home" asp-action="Staff">Our Staff</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Admin">Admin</a></li>
+                        
+                        @if (User.IsInRole("Instructor"))
+                        {
+                            <li><a asp-controller="Home" asp-action="Instructor">Instructor</a></li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li><a asp-controller="Home" asp-action="Admin">Admin</a></li>
+                        }
+                        @if (User.IsInRole("User"))
+                        {
+                            <li><a asp-controller="Enrollments" asp-action="Index">My Courses</a></li>
+                        }
+
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                     </ul>
 

@@ -10,89 +10,91 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace lms.Controllers
 {
-
     [Authorize(Roles = "Admin")]
-    public class CategoriesController : Controller
+    public class MaterialsController : Controller
     {
         private readonly LmsDBContext _context;
 
-        public CategoriesController(LmsDBContext context)
+        public MaterialsController(LmsDBContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Materials
         public async Task<IActionResult> Index()
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'LmsDBContext.Category'  is null.");
+            var lmsDBContext = _context.Material.Include(m => m.Course);
+            return View(await lmsDBContext.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Materials/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Material == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var material = await _context.Material
+                .Include(m => m.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (material == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(material);
         }
 
-        // GET: Categories/Create
-        public IActionResult Create()
+        // GET: Materials/Create
+        public IActionResult Create(int? courseId)
         {
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name", courseId);
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Materials/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,iconURL")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,VideoURL,InstructorId,ImageURL,Author,CourseId")] Material material)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(material);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name", material.CourseId);
+            return View(material);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Materials/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Material == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var material = await _context.Material.FindAsync(id);
+            if (material == null)
             {
                 return NotFound();
             }
-            return View(category);
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name", material.CourseId);
+            return View(material);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Materials/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,iconURL")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,InstructorId,VideoURL,ImageURL,Author,CourseId")] Material material)
         {
-            if (id != category.Id)
+            if (id != material.Id)
             {
                 return NotFound();
             }
@@ -101,12 +103,12 @@ namespace lms.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(material);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!MaterialExists(material.Id))
                     {
                         return NotFound();
                     }
@@ -117,49 +119,51 @@ namespace lms.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            ViewData["CourseId"] = new SelectList(_context.Course, "Id", "Name", material.CourseId);
+            return View(material);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Materials/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Material == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var material = await _context.Material
+                .Include(m => m.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (material == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(material);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Materials/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Category == null)
+            if (_context.Material == null)
             {
-                return Problem("Entity set 'LmsDBContext.Category'  is null.");
+                return Problem("Entity set 'LmsDBContext.Material'  is null.");
             }
-            var category = await _context.Category.FindAsync(id);
-            if (category != null)
+            var material = await _context.Material.FindAsync(id);
+            if (material != null)
             {
-                _context.Category.Remove(category);
+                _context.Material.Remove(material);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool MaterialExists(int id)
         {
-          return (_context.Category?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Material?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

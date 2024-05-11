@@ -10,7 +10,7 @@
             <div class="col-12">
                 <div class="row justify-content-center ">
                     <div class="col-lg-6 text-center ">
-                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Admin Panel - @ViewData["Title"]</h1>
+                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Instructor Panel - @ViewData["Title"]</h1>
                     </div>
 
 
@@ -49,10 +49,10 @@
                         <td><img src="@Html.DisplayFor(modelItem => item.imageURL)" style="height:150px; width: auto" alt="Image" class="img-fluid"></td>
                         <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
                         <td>
-                            <a class="btn btn-primary btn-sm mb-2" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-info btn-sm mb-2" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-danger btn-sm mb-2" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            @Html.ActionLink("Create Material", "Create", "Materials", new { courseId = @item.Id }, new { @class = "btn btn-primary mb-2" })
+                            <a class="btn btn-primary btn-sm mb-2" asp-controller="InstructorCourse" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-info btn-sm mb-2" asp-controller="InstructorCourse" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-danger btn-sm mb-2" asp-controller="InstructorCourse"  asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            @Html.ActionLink("Create Material", "Create", "InstructorMaterial", new { courseId = @item.Id }, new { @class = "btn btn-primary mb-2" })
                         </td>
                     </tr>
                 }

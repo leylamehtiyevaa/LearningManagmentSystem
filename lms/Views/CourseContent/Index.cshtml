@@ -1,0 +1,185 @@
+﻿@model lms.Models.CourseEnrollement
+
+@{
+    ViewData["Title"] = Model.course.Name;
+    var selectedStep = Model.currentStep >= Model.stepLength ? Model.stepLength-1 : Model.currentStep - 1;
+    void setStep (int step)
+    {
+        selectedStep = step;
+    }
+}
+
+<div class="untree_co-hero overlay" style="background-image: url(@Model.course.imageURL);background-size: auto 300px;">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12">
+                <div class="row justify-content-center ">
+                    <div class="col-lg-6 text-center ">
+                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">@Model.course.Name Course Content</h1>
+                        <div class="mb-5 text-white desc mx-auto" data-aos="fade-up" data-aos-delay="200">
+                            @if(Model.enrolled)
+                            {
+                                <p> You are already enrolled ! please scroll down to navigate to the course content</p>
+                                <form class="d-flex justify-content-center" asp-controller="CourseContent" asp-action="UnEnroll" asp-route-id="@Model?.course.Id">
+                                    <button type="submit" class="btn btn-danger btn-sm menu-absolute">UnEnroll</button>
+                                </form>
+                            }else {
+                                <p>Please press the enroll button to view the course content</p>
+                                <form class="d-flex justify-content-center" asp-controller="CourseContent" asp-action="Enroll" asp-route-id="@Model?.course.Id">
+                                    <button type="submit" class="btn btn-secondary btn-sm menu-absolute">Enroll</button>
+                                </form>
+                            }
+                            
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+</div>
+
+
+
+
+@if (Model.enrolled)
+{
+    var totalSteps = Model.materials?.ToArray()?.Length;
+    var completedSteps = Model.currentStep - 1;
+    double progress = Convert.ToDouble(completedSteps) / Model.stepLength;
+    var progressPercentage = Model.stepLength != 0 ? progress * 100 : 0;
+    <div class="container mt-4">
+    <div class="row">
+        <!-- Left column for video and step details -->
+        <div class="col-lg-8">
+            <!-- Video player (you can embed YouTube or other video players here) -->
+            <div class="video-container">
+                    @if(Model.materials.ToArray().Length > 0){
+                        var arr = Model.materials?.ToArray();
+                        var selectedvideo = Model.materials?.ToArray()[selectedStep]?.VideoURL;
+                        <iframe src="https://www.youtube.com/embed/@arr[selectedStep]?.VideoURL" allowfullscreen></iframe>
+                    }
+
+                
+            </div>
+            <!-- Step details -->
+                @if (Model.materials.ToArray().Length > 0)
+                {
+                <h3 class="step-name">Step  @(selectedStep + 1) : @Model.materials.ToArray()[selectedStep].Name</h3>
+                <p class="step-description">
+                        @Model.materials.ToArray()[selectedStep].Description
+                </p>
+                }
+
+        </div>
+        <!-- Right column for course steps -->
+        <div class="col-lg-4">
+                <h4>Progress</h4>
+                <div class="progress mt-3">
+                    <div class="progress-bar" role="progressbar" style="width: @progressPercentage%;" aria-valuenow="@completedSteps" aria-valuemin="0" aria-valuemax="@totalSteps"></div>
+                </div>
+            <h4>Course Steps</h4>
+            <div class="list-group">
+                @if (Model.enrolled)
+                {
+                    var counter = 0;
+                    @foreach (var crs in Model.materials)
+                    {
+                            var isActive = selectedStep == counter ? "active" : "";
+                            var isDisabled = counter == Model.currentStep - 2 || counter == Model.currentStep -1 ? "" : "disabled";
+                            <div class="d-flex align-items-center">
+                                <input id="stepCheckbox@counter" data-step-id="@counter" type="checkbox" class="form-check-input mr-3" id="stepCheckbox@counter" @(counter < Model.currentStep - 1 ? "checked" : "") @(isDisabled)>
+                                <button onclick="buttonClick(@counter)" type="button" class="list-group-item list-group-item-action step-button @isActive @isDisabled">Step @(++counter) : @crs.Name</button>
+                            </div>
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+<script>
+    var selectedStep = 1; // Initialize selectedStep
+    function updateButtons() {
+        // Loop through buttons and update their classes
+        var buttons = document.querySelectorAll('.step-button');
+        buttons.forEach(function (button, index) {
+            var isActive = selectedStep === index ? "active" : "";
+            console.log(button.classList)
+            try {
+                button.classList.remove("active");
+            }catch(e) {
+                console.log("my error " + e)
+            }
+            try {
+                button.classList.add(isActive);
+            }catch(e) {
+                console.log("my error 2" + e)
+            }
+            //button.classList.remove("active");
+            //button.classList.add(isActive);
+        });
+    }
+    function buttonClick(index) {
+        selectedStep = index;
+        updateButtons();
+        var materials = @Html.Raw(Json.Serialize(Model.materials)); // Deserialize the materials JSON
+        selectedvideo = materials[selectedStep].videoURL;
+        stepTitle = materials[selectedStep].name;
+        stepDetails = materials[selectedStep].description;
+        updateVideo();
+    }
+
+    function updateVideo() {
+        var videoContainer = document.querySelector('.video-container iframe');
+        videoContainer.src = "https://www.youtube.com/embed/" + selectedvideo;
+        var stepName = document.querySelector('.step-name');
+        var stepDescription = document.querySelector('.step-description');
+        
+        stepName.textContent = "Step " + (selectedStep + 1) + ": " + stepTitle;
+        stepDescription.textContent = stepDetails;
+    }
+
+
+    //edit step 
+    function handleCheckboxChange(checkbox) {
+        var stepId = checkbox.getAttribute("data-step-id");
+        var isChecked = checkbox.checked;
+        var newStep = isChecked ? (parseInt(stepId) + 2) : parseInt(stepId);
+        var url = "/CourseContent/EditStep/" + @Model.enrollementID + "?step=" + newStep;
+        console.log(url)
+        // Make an AJAX request to the EditStep method
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { step: isChecked ? parseInt(stepId) + 2 : parseInt(stepId) },
+            success: function (response) {
+                // Handle the success response if needed
+                location.reload();
+                console.log("Checkbox state updated successfully.");
+            },
+            error: function (error) {
+                // Handle any errors if needed
+                console.log(error)
+                location.reload();
+                console.error("Error updating checkbox state: " + error.responseText);
+            }
+        });
+    }
+
+    // Attach an event listener to all checkboxes
+    var checkboxes = document.querySelectorAll(".form-check-input");
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", function () {
+            handleCheckboxChange(checkbox);
+        });
+    });
+
+</script>
